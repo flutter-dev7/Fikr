@@ -1,0 +1,164 @@
+import 'package:fikr/features/auth/presentation/providers/auth_controller.dart';
+import 'package:fikr/features/auth/presentation/widgets/my_button.dart';
+import 'package:fikr/features/auth/presentation/widgets/my_text_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class SignUpPage extends ConsumerStatefulWidget {
+  const SignUpPage({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends ConsumerState<SignUpPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  void signUp() async {
+    await ref
+        .read(authControllerProvider.notifier)
+        .signUp(
+          name: nameController.text.trim(),
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          confirmPassword: confirmPasswordController.text.trim(),
+        );
+
+    var state = ref.watch(authControllerProvider);
+
+    state.when(
+      data: (data) {
+        nameController.clear();
+        emailController.clear();
+        passwordController.clear();
+        confirmPasswordController.clear();
+      },
+      error: (error, stackTrace) => showSnackbar(error.toString(), Colors.red),
+      loading: () {},
+    );
+  }
+
+  void showSnackbar(String content, Color backgroundColor) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(content, style: TextStyle(fontWeight: FontWeight.w700)),
+        backgroundColor: backgroundColor,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
+    final authState = ref.watch(authControllerProvider);
+    return Scaffold(
+      backgroundColor: theme.surface,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // logo
+                Image.asset("assets/icon/logo.png", height: 70),
+
+                const SizedBox(height: 20),
+
+                // welcome back message
+                Text(
+                  "Общайтесь, делитесь, открывайте новое",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: theme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                // fullname textfield
+                MyTextField(
+                  hintText: "Полное Имя",
+                  obscureText: false,
+                  controller: nameController,
+                  keyboardType: TextInputType.name,
+                ),
+
+                const SizedBox(height: 10),
+
+                // email textfield
+                MyTextField(
+                  hintText: "Email",
+                  obscureText: false,
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+
+                const SizedBox(height: 10),
+
+                // password textfield
+                MyTextField(
+                  hintText: "Пароль",
+                  obscureText: true,
+                  controller: passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                ),
+
+                const SizedBox(height: 10),
+
+                // confirm textfield
+                MyTextField(
+                  hintText: "Подвердите Пароль",
+                  obscureText: true,
+                  controller: confirmPasswordController,
+                  keyboardType: TextInputType.visiblePassword,
+                ),
+
+                const SizedBox(height: 20),
+
+                // button
+                MyButton(
+                  onPressed: signUp,
+                  title: authState.isLoading
+                      ? "Загрузка..."
+                      : "Зарегистрироваться",
+                ),
+
+                const SizedBox(height: 20),
+
+                // login now
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Уже есть аккаунт? ",
+                      style: TextStyle(color: theme.primary, fontSize: 16),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        "Войти",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
