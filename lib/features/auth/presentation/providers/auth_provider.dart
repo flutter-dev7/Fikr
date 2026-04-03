@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fikr/config/errors/firebase_error.dart';
 import 'package:fikr/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:fikr/features/auth/data/repository/auth_repository_impl.dart';
 import 'package:fikr/features/auth/domain/entities/user_entity.dart';
@@ -16,6 +17,10 @@ final firebaseAuthProvider = Provider<FirebaseAuth>((ref) {
 
 final firestoreProvider = Provider<FirebaseFirestore>((ref) {
   return FirebaseFirestore.instance;
+});
+
+final firebaseErrorProvider = Provider<FirebaseError>((ref) {
+  return FirebaseError();
 });
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {

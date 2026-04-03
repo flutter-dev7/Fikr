@@ -1,5 +1,6 @@
 import 'package:fikr/features/auth/presentation/providers/auth_controller.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_button.dart';
+import 'package:fikr/features/auth/presentation/widgets/my_text.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +18,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
-  void signUp() async {
+  void _signUp() async {
     await ref
         .read(authControllerProvider.notifier)
         .signUp(
@@ -36,12 +37,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         passwordController.clear();
         confirmPasswordController.clear();
       },
-      error: (error, stackTrace) => showSnackbar(error.toString(), Colors.red),
+      error: (error, stackTrace) => _showSnackbar(error.toString(), Colors.red),
       loading: () {},
     );
   }
 
-  void showSnackbar(String content, Color backgroundColor) {
+  void _showSnackbar(String content, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(content, style: TextStyle(fontWeight: FontWeight.w700)),
@@ -70,13 +71,12 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 const SizedBox(height: 20),
 
                 // welcome back message
-                Text(
-                  "Общайтесь, делитесь, открывайте новое",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: theme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                MyText(
+                  title: "Общайтесь, делитесь, открывайте новое",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: theme.primary,
+                  textAlign: TextAlign.center,
                 ),
 
                 const SizedBox(height: 20),
@@ -123,7 +123,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
                 // button
                 MyButton(
-                  onPressed: signUp,
+                  onPressed: _signUp,
                   title: authState.isLoading
                       ? "Загрузка..."
                       : "Зарегистрироваться",
@@ -135,21 +135,21 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Уже есть аккаунт? ",
-                      style: TextStyle(color: theme.primary, fontSize: 16),
+                    MyText(
+                      title: "Уже есть аккаунт? ",
+                      color: theme.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Text(
-                        "Войти",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: MyText(
+                        title: "Войти",
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],

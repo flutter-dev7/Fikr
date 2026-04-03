@@ -1,5 +1,6 @@
 import 'package:fikr/features/auth/presentation/providers/auth_controller.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_button.dart';
+import 'package:fikr/features/auth/presentation/widgets/my_text.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,7 @@ class ResetPasswordPage extends ConsumerStatefulWidget {
 class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   TextEditingController emailController = TextEditingController();
 
-  void resetPassword() async {
+  void _resetPassword() async {
     await ref
         .read(authControllerProvider.notifier)
         .resetPassword(emailController.text.trim());
@@ -25,17 +26,17 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     state.when(
       data: (data) {
         emailController.clear();
-        showSnackbar(
+        _showSnackbar(
           "Проверьте ваш email и следуйте инструкциям",
           Colors.green,
         );
       },
-      error: (error, stackTrace) => showSnackbar(error.toString(), Colors.red),
+      error: (error, stackTrace) => _showSnackbar(error.toString(), Colors.red),
       loading: () {},
     );
   }
 
-  void showSnackbar(String content, Color backgroundColor) {
+  void _showSnackbar(String content, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(content, style: TextStyle(fontWeight: FontWeight.w700)),
@@ -45,7 +46,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     );
   }
 
-  void showInstructions() {
+  void _showInstructions() {
     final theme = Theme.of(context).colorScheme;
 
     showModalBottomSheet(
@@ -83,28 +84,26 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                 child: Icon(Icons.lock_reset, color: theme.primary, size: 28),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               // heading
-              Text(
-                "Восстановление пароля",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: theme.onSurface,
-                ),
+              MyText(
+                title: "Восстановление пароля",
+                color: theme.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
               ),
 
               const SizedBox(height: 10),
 
               // description
-              Text(
-                "Мы поможем вам вернуть доступ к аккаунту всего за пару шагов.",
+              MyText(
+                title:
+                    "Мы поможем вам вернуть доступ к аккаунту всего за пару шагов.",
+                color: theme.primary,
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: theme.onSurface.withOpacity(0.7),
-                ),
               ),
 
               const SizedBox(height: 20),
@@ -117,7 +116,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                 "Перейдите по ссылке из письма",
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               // clue
               Row(
@@ -125,9 +124,10 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                   Icon(Icons.info_outline, size: 18, color: Colors.grey),
                   const SizedBox(width: 6),
                   Expanded(
-                    child: Text(
-                      "Не забудьте проверить папку «Спам»",
-                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                    child: MyText(
+                      title: "Не забудьте проверить папку «Спам»",
+                      color: theme.primary,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
@@ -136,28 +136,10 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
               const SizedBox(height: 20),
 
               // button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Text(
-                    "Понятно",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              MyButton(
+                onPressed: () => Navigator.pop(context),
+                title: "Понятно",
               ),
-
               const SizedBox(height: 10),
             ],
           ),
@@ -171,9 +153,15 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, size: 22, color: Colors.grey),
+          Icon(icon, size: 24, color: Colors.grey),
           const SizedBox(width: 10),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 15))),
+          Expanded(
+            child: MyText(
+              title: text,
+              color: Colors.black,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );
@@ -188,7 +176,8 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: showInstructions,
+            onPressed: _showInstructions,
+            tooltip: "Info",
             icon: Icon(Icons.info_outline),
           ),
         ],
@@ -200,18 +189,19 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // reset password message
-              Text(
-                "Сброс Пароля",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                ),
+              MyText(
+                title: "Сброс Пароля",
+                color: theme.inversePrimary,
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
               ),
 
-              Text(
-                "Введите email, чтобы получить ссылку для восстановления",
-                style: TextStyle(fontSize: 16, color: theme.primary),
+              MyText(
+                title:
+                    "Введите email, чтобы получить ссылку для восстановления",
+                color: theme.primary,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
               ),
 
               const SizedBox(height: 20),
@@ -228,7 +218,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
               // button
               MyButton(
-                onPressed: resetPassword,
+                onPressed: _resetPassword,
                 title: authState.isLoading ? "Загрузка..." : "Отправить ссылку",
               ),
             ],

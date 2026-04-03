@@ -1,6 +1,7 @@
 import 'package:fikr/config/routes/app_routes.dart';
 import 'package:fikr/features/auth/presentation/providers/auth_controller.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_button.dart';
+import 'package:fikr/features/auth/presentation/widgets/my_text.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +17,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void login() async {
+  void _login() async {
     await ref
         .read(authControllerProvider.notifier)
         .login(
@@ -31,12 +32,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         emailController.clear();
         passwordController.clear();
       },
-      error: (error, stackTrace) => showSnackbar(error.toString(), Colors.red),
+      error: (error, stackTrace) => _showSnackbar(error.toString(), Colors.red),
       loading: () {},
     );
   }
 
-  void showSnackbar(String content, Color backgroundColor) {
+  void _showSnackbar(String content, Color backgroundColor) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(content, style: TextStyle(fontWeight: FontWeight.w700)),
@@ -65,13 +66,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 const SizedBox(height: 20),
 
                 // welcome back message
-                Text(
-                  "Добро пожаловать обратно!",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: theme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                MyText(
+                  title: "Добро пожаловать обратно!",
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: theme.primary,
                 ),
 
                 const SizedBox(height: 20),
@@ -103,13 +102,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   },
                   child: Align(
                     alignment: AlignmentGeometry.centerRight,
-                    child: Text(
-                      "Забыли Пароль?",
-                      style: TextStyle(
-                        color: theme.primary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                    child: MyText(
+                      title: "Забыли Пароль?",
+                      color: Colors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -118,7 +115,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                 // login button
                 MyButton(
-                  onPressed: login,
+                  onPressed: _login,
                   title: authState.isLoading ? "Загрузка..." : "Войти",
                 ),
 
@@ -128,21 +125,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Нет аккаунта? ",
-                      style: TextStyle(color: theme.primary, fontSize: 16),
+                    MyText(
+                      title: "Нет аккаунта? ",
+                      color: theme.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, AppRoutes.signUp);
                       },
-                      child: Text(
-                        "Зарегистрироваться",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: MyText(
+                        title: "Зарегистрироваться",
+                        color: Colors.blue,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],

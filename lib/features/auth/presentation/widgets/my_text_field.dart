@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyTextField extends StatelessWidget {
   final String hintText;
@@ -20,6 +21,10 @@ class MyTextField extends StatelessWidget {
       obscureText: obscureText,
       controller: controller,
       keyboardType: keyboardType,
+      style: GoogleFonts.montserrat(
+        color: theme.primary,
+        fontWeight: FontWeight.w500,
+      ),
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: theme.tertiary, width: 2),
@@ -30,7 +35,7 @@ class MyTextField extends StatelessWidget {
         filled: true,
         fillColor: theme.secondary,
         hintText: hintText,
-        hintStyle: TextStyle(color: theme.primary),
+        hintStyle: GoogleFonts.montserrat(color: theme.primary),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:fikr/features/auth/presentation/widgets/my_text.dart';
 import 'package:flutter/material.dart';
 
 class MyButton extends StatelessWidget {
@@ -19,13 +20,11 @@ class MyButton extends StatelessWidget {
             borderRadius: BorderRadiusGeometry.circular(4),
           ),
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            color: theme.secondary,
-            fontWeight: FontWeight.w700,
-          ),
+        child: MyText(
+          title: title,
+          color: theme.secondary,
+          fontWeight: FontWeight.w700,
+          fontSize: 16,
         ),
       ),
     );
