@@ -1,6 +1,8 @@
 import 'package:fikr/config/routes/app_routes.dart';
 import 'package:fikr/config/themes/light_mode.dart';
+import 'package:fikr/features/auth/presentation/pages/auth_gade.dart';
 import 'package:fikr/firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,9 +23,10 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.login,
+      home: const AuthGade(),
       onGenerateRoute: AppRoutes.onGenerateRoute,
       theme: lightMode,
       // darkTheme: darkMode,

@@ -1,3 +1,4 @@
+import 'package:fikr/config/routes/app_routes.dart';
 import 'package:fikr/features/auth/presentation/providers/auth_controller.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_button.dart';
 import 'package:fikr/features/auth/presentation/widgets/my_text.dart';
@@ -28,7 +29,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
           confirmPassword: confirmPasswordController.text.trim(),
         );
 
-    var state = ref.watch(authControllerProvider);
+    if (!mounted) return;
+    var state = ref.read(authControllerProvider);
 
     state.when(
       data: (data) {
@@ -36,6 +38,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
         emailController.clear();
         passwordController.clear();
         confirmPasswordController.clear();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.home,
+          (route) => false,
+        );
       },
       error: (error, stackTrace) => _showSnackbar(error.toString(), Colors.red),
       loading: () {},

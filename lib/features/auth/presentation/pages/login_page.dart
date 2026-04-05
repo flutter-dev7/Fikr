@@ -25,12 +25,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           password: passwordController.text.trim(),
         );
 
-    var state = ref.watch(authControllerProvider);
+    if (!mounted) return;
+    var state = ref.read(authControllerProvider);
 
     state.when(
       data: (data) {
         emailController.clear();
         passwordController.clear();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.home,
+          (route) => false,
+        );
       },
       error: (error, stackTrace) => _showSnackbar(error.toString(), Colors.red),
       loading: () {},
